@@ -4,7 +4,7 @@
 
 Artists: Upload your music directly, without distributors. Keep full control and connect with your fans.
 
-Fans: Discover fresh sounds, support independent artists, and stay informed about the music industry.
+Fans: Discover fresh sounds, support artists, and stay informed about the music industry.
 
 
 **Why choose Cipher?**
