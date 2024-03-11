@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const DataModel = require('./Schema.js');
+const SongSchema = require('./SongSchema.js');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const app = express();
 app.use(express.json());
@@ -12,7 +14,7 @@ mongoose.connect("mongodb+srv://Rishabh:Cipher@cluster0.rjxz1yt.mongodb.net/?ret
     console.log('Connected to MongoDB');
 
     app.get('/', (req, res) => {
-      DataModel.find()
+      SongSchema.find()
         .then((data) => {
           res.send(data);
         })
@@ -21,35 +23,38 @@ mongoose.connect("mongodb+srv://Rishabh:Cipher@cluster0.rjxz1yt.mongodb.net/?ret
         });
     });
 
-    app.post('/addTrack', async (req, res) => {
-      try {
-       
-        const {thumbnail,songName,songDescription,tags,audio,nextTrackList,albumDescription,audioType,} = req.body;
-        const newTrack = new DataModel({
-          thumbnail,
-          songName,
-          songDescription,
-          tags,
-          audio: {
-            data: Buffer.from(audio, 'base64'),
-            contentType: audioType,
-          },
-          nextTrackList,
-          albumDescription,
+    app.post('/add', (req, res) => {
+      const {
+        name,
+        image,
+        song,
+        album,
+        artist,
+        language,
+        category
+      } = req.body;
+
+      const newSong = new SongSchema({
+        name,
+        image,
+        song,
+        album,
+        artist,
+        language,
+        category
+      });
+
+      newSong.save()
+        .then(() => {
+          res.status(201).send('Song/Album added Successfully');
+        })
+        .catch((err) => {
+          res.status(500).send(err);
         });
-        const savedTrack = await newTrack.save();
-        res.status(201).json(savedTrack);
-      } catch (error) {
-        res.status(500).json({ message: error.message });
-      }
     });
-    
-  })
 
+  });
 
-  
-
-
-app.listen(10000, () => {
-  console.log('Server is running on port 10000');
+app.listen(4000, () => {
+  console.log('Server is running on port 4000');
 });
