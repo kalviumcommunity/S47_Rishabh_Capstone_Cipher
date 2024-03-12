@@ -53,6 +53,39 @@ mongoose.connect("mongodb+srv://Rishabh:Cipher@cluster0.rjxz1yt.mongodb.net/?ret
         });
     });
 
+
+
+
+    app.delete('/:id', async (req, res) => {
+      const id = req.params.id;
+      try {
+        const deletedSong = await SongSchema.findByIdAndDelete(id);
+        if (!deletedSong) {
+          return res.status(404).send('Song not found');
+        }
+        res.json(deletedSong);
+      } catch (err) {
+        res.status(500).send(err.message);
+      }
+    });
+
+    app.put('/:id', async (req, res) => {
+      const id = req.params.id;
+      const update = req.body;
+
+      try {
+        const updatedSong = await SongSchema.findByIdAndUpdate(id, update, { new: true });
+        if (!updatedSong) {
+          return res.status(404).send('Song not found');
+        }
+        res.json(updatedSong);
+      } catch (err) {
+        res.status(500).send(err.message);
+      }
+    });
+
+
+
   });
 
 app.listen(4000, () => {
